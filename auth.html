@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập &amp; Đăng ký — EduForum</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- HEADER TỐI GIẢN CHO TRANG XÁC THỰC -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <strong>EduForum</strong>
+        <span>Cộng đồng Học tập</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Điều hướng">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">&larr; Quay lại Bảng tin Public</a></li>
+          <li><a href="resources.html" class="nav-link">Kho tài liệu</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container auth-page-wrapper">
+    <div class="auth-columns">
+      <!-- CỘT 1: BIỂU MẪU ĐĂNG NHẬP -->
+      <section class="card auth-card" aria-labelledby="loginHeading">
+        <h1 id="loginHeading" class="section-title">Đăng nhập tài khoản</h1>
+        <p class="text-muted">Đăng nhập để tham gia thảo luận, chia sẻ tài liệu và kết nối bạn học.</p>
+
+        <div id="loginError" class="alert-error" style="display: none;" role="alert"></div>
+
+        <form id="loginForm" class="app-form">
+          <div class="form-group">
+            <label for="loginUsername">Tên đăng nhập *</label>
+            <input type="text" id="loginUsername" name="username" placeholder="Nhập username (ví dụ: minhanh)" required>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Mật khẩu *</label>
+            <input type="password" id="loginPassword" name="password" placeholder="Nhập mật khẩu" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+        </form>
+
+        <!-- Gợi ý tài khoản mẫu có sẵn trong localStorage -->
+        <aside class="demo-accounts-box">
+          <h3>Tài khoản mẫu (Dùng để kiểm thử nhanh):</h3>
+          <ul>
+            <li><strong>Quản trị viên (Admin):</strong> <code>admin</code> / <code>123456</code></li>
+            <li><strong>Thành viên 1 (User):</strong> <code>minhanh</code> / <code>123456</code></li>
+            <li><strong>Thành viên 2 (User):</strong> <code>hoangnam</code> / <code>123456</code></li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- CỘT 2: BIỂU MẪU ĐĂNG KÝ THÀNH VIÊN MỚI -->
+      <section class="card auth-card" aria-labelledby="registerHeading">
+        <h2 id="registerHeading" class="section-title">Đăng ký thành viên mới</h2>
+        <p class="text-muted">Tạo tài khoản miễn phí để lưu trữ tài liệu và xây dựng mạng lưới học tập.</p>
+
+        <div id="registerError" class="alert-error" style="display: none;" role="alert"></div>
+
+        <form id="registerForm" class="app-form">
+          <div class="form-group">
+            <label for="regFullName">Họ và tên hiển thị *</label>
+            <input type="text" id="regFullName" name="fullName" placeholder="Ví dụ: Phạm Quốc Bảo" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regUsername">Tên đăng nhập *</label>
+            <input type="text" id="regUsername" name="username" placeholder="Chữ thường, số, dấu gạch dưới (từ 3 ký tự)" minlength="3" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regPassword">Mật khẩu *</label>
+            <input type="password" id="regPassword" name="password" placeholder="Tối thiểu 6 ký tự" minlength="6" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regConfirmPassword">Xác nhận mật khẩu *</label>
+            <input type="password" id="regConfirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" minlength="6" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regAvatar">Ảnh đại diện (URL tùy chọn)</label>
+            <input type="url" id="regAvatar" name="avatar" placeholder="https://example.com/avatar.png">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Tạo tài khoản mới</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 EduForum — Nền tảng Thảo luận &amp; Chia sẻ Học tập.</p>
+    </div>
+  </footer>
+
+  <!-- THỨ TỰ NẠP SCRIPT CHUẨN -->
+  <script src="js/mockData.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

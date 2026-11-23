@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trung tâm Kiểm duyệt &amp; Thống kê — EduForum</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- HEADER & ĐIỀU HƯỚNG -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <strong>EduForum</strong>
+        <span>Quản trị &amp; Kiểm duyệt</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Bảng tin thảo luận</a></li>
+          <li><a href="resources.html" class="nav-link">Kho tài liệu</a></li>
+          <li data-auth="user">
+            <a href="profile.html" class="nav-link">
+              Hồ sơ cá nhân
+              <span class="badge badge-danger js-friend-request-badge" style="display: none;">0</span>
+            </a>
+          </li>
+          <li data-role="admin">
+            <a href="admin.html" class="nav-link active">Kiểm duyệt</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-user-actions">
+        <div class="user-menu-box" data-auth="user">
+          <img src="assets/images/default-avatar.png" alt="Ảnh đại diện Admin" class="avatar-sm js-current-user-avatar">
+          <div class="user-menu-text">
+            <span class="js-current-user-name">Admin</span>
+            <small class="js-current-user-role">Quản trị viên (Admin)</small>
+          </div>
+          <button type="button" id="logoutBtn" class="btn btn-sm btn-outline js-logout-btn">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <h1 class="page-heading">Bảng điều khiển Kiểm duyệt &amp; Thống kê Cộng đồng</h1>
+
+    <!-- 1. THẺ SỐ LIỆU THỐNG KÊ TỔNG QUAN -->
+    <section id="adminStatsContainer" class="stats-grid" aria-label="Thống kê tổng quan">
+      <!-- Render động bởi AdminModule.renderAdminDashboardStats() -->
+    </section>
+
+    <!-- 2. BẢNG HÀNG CHỜ KIỂM DUYỆT THEO MỨC ĐỘ ƯU TIÊN -->
+    <section class="card admin-section">
+      <div class="section-header-flex">
+        <div>
+          <h2 class="section-title">Hàng chờ kiểm duyệt nội dung</h2>
+          <p class="text-muted">Nội dung bị người dùng báo cáo vi phạm được gắn mức <strong>Ưu tiên Cao</strong> và tự động xếp lên đầu.</p>
+        </div>
+        <select id="adminQueueTypeFilter" aria-label="Lọc loại nội dung chờ duyệt">
+          <option value="all">Tất cả nội dung chờ duyệt</option>
+          <option value="post">Chỉ Bài thảo luận</option>
+          <option value="resource">Chỉ Tài liệu học tập</option>
+        </select>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Mức ưu tiên</th>
+              <th>Loại</th>
+              <th>Tiêu đề &amp; Tóm tắt nội dung</th>
+              <th>Tác giả</th>
+              <th>Thời gian gửi</th>
+              <th>Thao tác kiểm duyệt</th>
+            </tr>
+          </thead>
+          <tbody id="moderationQueueBody">
+            <!-- Render động bởi AdminModule.renderModerationQueueTable() -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. BẢNG DANH SÁCH BÁO CÁO VI PHẠM -->
+    <section class="card admin-section">
+      <div class="section-header-flex">
+        <div>
+          <h2 class="section-title">Danh sách báo cáo vi phạm từ người dùng</h2>
+          <p class="text-muted">Xem xét lý do báo cáo và quyết định giữ lại, yêu cầu chỉnh sửa hoặc loại bỏ nội dung.</p>
+        </div>
+        <select id="adminReportStatusFilter" aria-label="Lọc trạng thái báo cáo">
+          <option value="pending">Báo cáo chờ xử lý</option>
+          <option value="resolved">Báo cáo đã xử lý</option>
+          <option value="all">Tất cả báo cáo</option>
+        </select>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Người báo cáo</th>
+              <th>Đối tượng bị báo cáo</th>
+              <th>Lý do vi phạm</th>
+              <th>Thời gian</th>
+              <th>Trạng thái</th>
+              <th>Xử lý báo cáo</th>
+            </tr>
+          </thead>
+          <tbody id="reportsTableBody">
+            <!-- Render động bởi AdminModule.renderReportsTable() -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. BẢNG XẾP HẠNG CHỦ ĐỀ ĐƯỢC QUAN TÂM & HỮU ÍCH -->
+    <section class="card admin-section">
+      <div class="section-header-flex">
+        <div>
+          <h2 class="section-title">Thống kê chủ đề được quan tâm &amp; hữu ích nhất</h2>
+          <p class="text-muted">Số liệu được tổng hợp động từ lượt Like, Dislike và Bình luận của bài viết &amp; tài liệu đã duyệt.</p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Hạng</th>
+              <th>Tên chủ đề</th>
+              <th>Số lượng nội dung</th>
+              <th>Điểm quan tâm (Tổng tương tác)</th>
+              <th>Độ hữu ích (Tổng lượt Like)</th>
+            </tr>
+          </thead>
+          <tbody id="adminTopicStatsBody">
+            <!-- Render động bởi AdminModule.renderAdminDashboardStats() -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 EduForum — Khu vực Quản trị viên &amp; Kiểm duyệt nội dung.</p>
+    </div>
+  </footer>
+
+  <!-- THỨ TỰ NẠP SCRIPT CHUẨN -->
+  <script src="js/mockData.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

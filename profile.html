@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ sơ cá nhân — EduForum</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- HEADER & ĐIỀU HƯỚNG -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <strong>EduForum</strong>
+        <span>Cộng đồng Học tập</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Bảng tin thảo luận</a></li>
+          <li><a href="resources.html" class="nav-link">Kho tài liệu</a></li>
+          <li data-auth="user">
+            <a href="profile.html" class="nav-link active">
+              Hồ sơ cá nhân
+              <span class="badge badge-danger js-friend-request-badge" style="display: none;">0</span>
+            </a>
+          </li>
+          <li data-role="admin" style="display: none;">
+            <a href="admin.html" class="nav-link">Kiểm duyệt</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-user-actions">
+        <div class="user-menu-box" data-auth="user">
+          <img src="assets/images/default-avatar.png" alt="Ảnh đại diện" class="avatar-sm js-current-user-avatar">
+          <div class="user-menu-text">
+            <span class="js-current-user-name">Thành viên</span>
+            <small class="js-current-user-role">Thành viên</small>
+          </div>
+          <button type="button" id="logoutBtn" class="btn btn-sm btn-outline js-logout-btn">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- THỐNG KÊ HOẠT ĐỘNG CÁ NHÂN -->
+    <section aria-labelledby="personalStatsHeading" class="profile-stats-wrapper">
+      <h1 id="personalStatsHeading" class="page-heading">Hồ sơ &amp; Hoạt động cá nhân</h1>
+      <div id="personalStatsContainer" class="stats-grid">
+        <!-- Render động bởi AdminModule.renderProfilePageData() -->
+      </div>
+    </section>
+
+    <!-- BỐ CỤC 2 CỘT: THÔNG TIN & BẠN BÈ (TRÁI) | BÀI ĐĂNG & TÀI LIỆU (PHẢI) -->
+    <div class="layout-2-col">
+      <aside class="sidebar-left profile-sidebar">
+        <!-- Form cập nhật thông tin cá nhân -->
+        <section class="card">
+          <div class="profile-avatar-header">
+            <img src="assets/images/default-avatar.png" alt="Avatar cá nhân" class="avatar-lg js-current-user-avatar">
+            <div>
+              <h2 class="js-current-user-name">Thành viên</h2>
+              <span class="badge badge-topic js-current-user-role">Thành viên</span>
+            </div>
+          </div>
+
+          <form id="profileForm" class="app-form">
+            <div class="form-group">
+              <label for="profUsername">Tên đăng nhập</label>
+              <input type="text" id="profUsername" name="username" readonly disabled>
+            </div>
+            <div class="form-group">
+              <label for="profFullName">Họ và tên *</label>
+              <input type="text" id="profFullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+              <label for="profAvatar">Đường dẫn ảnh đại diện (URL)</label>
+              <input type="url" id="profAvatar" name="avatar" placeholder="https://example.com/avatar.png">
+            </div>
+            <div class="form-group">
+              <label for="profNewPassword">Đổi mật khẩu mới (bỏ trống nếu giữ nguyên)</label>
+              <input type="password" id="profNewPassword" name="newPassword" minlength="6" placeholder="Tối thiểu 6 ký tự">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Lưu thông tin hồ sơ</button>
+          </form>
+        </section>
+
+        <!-- Lời mời kết bạn chờ duyệt -->
+        <section class="card">
+          <h2 class="widget-title">Lời mời kết bạn chờ duyệt</h2>
+          <div id="friendRequestsContainer">
+            <!-- Render động bởi FriendsModule.renderFriendRequests() -->
+          </div>
+        </section>
+
+        <!-- Danh sách bạn bè hiện tại -->
+        <section class="card">
+          <h2 class="widget-title">Danh sách bạn bè</h2>
+          <div id="friendsListContainer">
+            <!-- Render động bởi FriendsModule.renderFriendsList() -->
+          </div>
+        </section>
+
+        <!-- Tìm kiếm & Kết nối bạn bè mới -->
+        <section class="card">
+          <h2 class="widget-title">Tìm kiếm bạn học</h2>
+          <div class="form-group">
+            <input type="search" id="userSearchInput" placeholder="Nhập họ tên hoặc @username...">
+          </div>
+          <div id="userSearchResults">
+            <!-- Render động bởi FriendsModule.renderUserDiscovery() -->
+          </div>
+        </section>
+      </aside>
+
+      <!-- DANH SÁCH NỘI DUNG CỦA TÀI KHOẢN -->
+      <section class="main-content">
+        <section class="profile-section-block">
+          <h2 class="section-title">Bài thảo luận của tôi</h2>
+          <div id="myPostsContainer" class="posts-feed">
+            <!-- Render động bởi AdminModule.renderProfilePageData() -->
+          </div>
+        </section>
+
+        <section class="profile-section-block">
+          <h2 class="section-title">Tài liệu đã chia sẻ</h2>
+          <div id="myResourcesContainer" class="resources-feed">
+            <!-- Render động bởi AdminModule.renderProfilePageData() -->
+          </div>
+        </section>
+
+        <section class="profile-section-block">
+          <h2 class="section-title">Tài liệu đã lưu</h2>
+          <div id="savedResourcesContainer" class="resources-feed">
+            <!-- Render động bởi AdminModule.renderProfilePageData() -->
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <!-- MODAL CHỈNH SỬA BÀI VIẾT TRÊN TRANG HỒ SƠ -->
+  <div id="editPostModal" class="modal" style="display: none;" role="dialog" aria-modal="true">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3>Chỉnh sửa bài thảo luận</h3>
+        <button type="button" class="btn-close-modal" onclick="document.getElementById('editPostModal').style.display='none'">&times;</button>
+      </div>
+      <form id="editPostForm" class="app-form">
+        <div class="form-group">
+          <label for="profEditPostTitle">Tiêu đề *</label>
+          <input type="text" id="profEditPostTitle" name="title" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profEditPostTopic">Chủ đề *</label>
+            <select id="profEditPostTopic" name="topic" class="js-topic-select" required></select>
+          </div>
+          <div class="form-group">
+            <label for="profEditPostVisibility">Phạm vi *</label>
+            <select id="profEditPostVisibility" name="visibility" required>
+              <option value="public">Công khai</option>
+              <option value="friends">Bạn bè</option>
+              <option value="onlyme">Chỉ mình tôi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="profEditPostContent">Nội dung *</label>
+          <textarea id="profEditPostContent" name="content" rows="4" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profEditPostMediaType">Loại đính kèm</label>
+            <select id="profEditPostMediaType" name="mediaType">
+              <option value="none">Không đính kèm</option>
+              <option value="image">Hình ảnh</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="form-group flex-2">
+            <label for="profEditPostMediaUrl">Liên kết Media</label>
+            <input type="url" id="profEditPostMediaUrl" name="mediaUrl">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('editPostModal').style.display='none'">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CHỈNH SỬA TÀI LIỆU TRÊN TRANG HỒ SƠ -->
+  <div id="editResourceModal" class="modal" style="display: none;" role="dialog" aria-modal="true">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3>Chỉnh sửa tài liệu</h3>
+        <button type="button" class="btn-close-modal" onclick="document.getElementById('editResourceModal').style.display='none'">&times;</button>
+      </div>
+      <form id="editResourceForm" class="app-form">
+        <div class="form-group">
+          <label for="profEditResTitle">Tên tài liệu *</label>
+          <input type="text" id="profEditResTitle" name="title" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profEditResTopic">Chủ đề *</label>
+            <select id="profEditResTopic" name="topic" class="js-topic-select" required></select>
+          </div>
+          <div class="form-group">
+            <label for="profEditResVisibility">Phạm vi *</label>
+            <select id="profEditResVisibility" name="visibility" required>
+              <option value="public">Công khai</option>
+              <option value="friends">Bạn bè</option>
+              <option value="onlyme">Chỉ mình tôi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="profEditResFileLink">Liên kết tài liệu (URL) *</label>
+          <input type="url" id="profEditResFileLink" name="fileLink" required>
+        </div>
+        <div class="form-group">
+          <label for="profEditResDescription">Mô tả *</label>
+          <textarea id="profEditResDescription" name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('editResourceModal').style.display='none'">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 EduForum — Quản lý hồ sơ &amp; kết nối học tập.</p>
+    </div>
+  </footer>
+
+  <!-- THỨ TỰ NẠP SCRIPT CHUẨN -->
+  <script src="js/mockData.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/resources.js"></script>
+  <script src="js/friends.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

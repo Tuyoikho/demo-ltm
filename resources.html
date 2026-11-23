@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kho tài liệu học tập — EduForum</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- HEADER & ĐIỀU HƯỚNG -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <strong>EduForum</strong>
+        <span>Cộng đồng Học tập</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Bảng tin thảo luận</a></li>
+          <li><a href="resources.html" class="nav-link active">Kho tài liệu</a></li>
+          <li data-auth="user" style="display: none;">
+            <a href="profile.html" class="nav-link">
+              Hồ sơ cá nhân
+              <span class="badge badge-danger js-friend-request-badge" style="display: none;">0</span>
+            </a>
+          </li>
+          <li data-role="admin" style="display: none;">
+            <a href="admin.html" class="nav-link">Kiểm duyệt</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-user-actions">
+        <div data-auth="guest">
+          <a href="auth.html" class="btn btn-primary btn-sm">Đăng nhập / Đăng ký</a>
+        </div>
+        <div class="user-menu-box" data-auth="user" style="display: none;">
+          <img src="assets/images/default-avatar.png" alt="Ảnh đại diện" class="avatar-sm js-current-user-avatar">
+          <div class="user-menu-text">
+            <span class="js-current-user-name">Thành viên</span>
+            <small class="js-current-user-role">Thành viên</small>
+          </div>
+          <button type="button" id="logoutBtn" class="btn btn-sm btn-outline js-logout-btn">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BỐ CỤC 2 CỘT FLEXBOX: SIDEBAR CHỦ ĐỀ + KHO TÀI LIỆU -->
+  <main class="container layout-2-col">
+    <aside class="sidebar-left">
+      <section class="card">
+        <h2 class="widget-title">Chủ đề tài liệu</h2>
+        <ul id="resourceSidebarTopics" class="topic-sidebar-list">
+          <!-- Render động bởi ResourcesModule.populateResourceTopicsSidebar() -->
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2 class="widget-title">Lưu ý chia sẻ</h2>
+        <ul class="guide-list">
+          <li>Gắn đúng chủ đề hoặc tạo chủ đề mới để bạn học dễ tra cứu.</li>
+          <li>Hỗ trợ liên kết tài liệu trực tuyến (Google Drive, MDN, GitHub, PDF...).</li>
+          <li>Bấm <strong>Lưu tài liệu</strong> để đưa vào bộ sưu tập trong Hồ sơ cá nhân.</li>
+        </ul>
+      </section>
+    </aside>
+
+    <section class="main-content">
+      <!-- Lời nhắc đăng nhập cho Khách thăm -->
+      <div class="card guest-banner" data-auth="guest">
+        <p>
+          Khách thăm chỉ xem được các tài liệu ở phạm vi <strong>Công khai</strong>.
+          <a href="auth.html">Đăng nhập ngay</a> để chia sẻ tài nguyên, đánh giá hữu ích và lưu tài liệu.
+        </p>
+      </div>
+
+      <!-- Biểu mẫu chia sẻ tài liệu mới -->
+      <section class="card create-box" data-auth="user" style="display: none;">
+        <h2 class="section-title">Chia sẻ tài liệu học tập</h2>
+        <form id="createResourceForm" class="app-form">
+          <div class="form-group">
+            <label for="resTitle">Tên tài liệu *</label>
+            <input type="text" id="resTitle" name="title" placeholder="Ví dụ: Tài liệu tổng hợp Flexbox & Grid CSS3" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="resTopicSelect">Chủ đề có sẵn *</label>
+              <select id="resTopicSelect" name="topic" class="js-topic-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="resNewTopic">Hoặc thêm chủ đề mới</label>
+              <input type="text" id="resNewTopic" name="newTopic" placeholder="Nhập tên chủ đề mới...">
+            </div>
+            <div class="form-group">
+              <label for="resVisibility">Phạm vi chia sẻ *</label>
+              <select id="resVisibility" name="visibility" required>
+                <option value="public">Công khai (Public)</option>
+                <option value="friends">Bạn bè (Friends)</option>
+                <option value="onlyme">Chỉ mình tôi (Only Me)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="resFileLink">Đường dẫn liên kết tài liệu (URL) *</label>
+            <input type="url" id="resFileLink" name="fileLink" placeholder="https://developer.mozilla.org/..." required>
+          </div>
+
+          <div class="form-group">
+            <label for="resDescription">Mô tả nội dung tài liệu *</label>
+            <textarea id="resDescription" name="description" rows="3" placeholder="Tóm tắt nội dung chính, đối tượng phù hợp..." required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Chia sẻ tài liệu</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Thanh tìm kiếm, lọc & sắp xếp tài liệu -->
+      <section class="card filter-toolbar" aria-label="Tìm kiếm và lọc tài liệu">
+        <div class="filter-row">
+          <input type="search" id="resourceSearchInput" placeholder="Tìm theo tên tài liệu, mô tả, tác giả...">
+          <select id="resourceTopicFilter" class="js-topic-select" data-include-all="true" aria-label="Lọc chủ đề tài liệu"></select>
+          <select id="resourceVisibilityFilter" aria-label="Lọc phạm vi tài liệu">
+            <option value="all">Mọi phạm vi</option>
+            <option value="public">Công khai</option>
+            <option value="friends">Bạn bè</option>
+            <option value="onlyme">Chỉ mình tôi</option>
+          </select>
+          <select id="resourceSortSelect" aria-label="Sắp xếp tài liệu">
+            <option value="newest">Mới nhất</option>
+            <option value="most_useful">Hữu ích nhất (Nhiều Like)</option>
+            <option value="most_interested">Quan tâm nhất (Nhiều tương tác)</option>
+            <option value="topic_interested">Chủ đề được quan tâm nhất</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Danh sách tài liệu học tập -->
+      <section id="resourcesContainer" class="resources-feed" aria-live="polite">
+        <!-- Render động bởi ResourcesModule.renderResourcesList() -->
+      </section>
+    </section>
+  </main>
+
+  <!-- MODAL CHỈNH SỬA TÀI LIỆU -->
+  <div id="editResourceModal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editResourceModalTitle">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3 id="editResourceModalTitle">Chỉnh sửa thông tin tài liệu</h3>
+        <button type="button" class="btn-close-modal" onclick="document.getElementById('editResourceModal').style.display='none'">&times;</button>
+      </div>
+      <form id="editResourceForm" class="app-form">
+        <div class="form-group">
+          <label for="editResTitle">Tên tài liệu *</label>
+          <input type="text" id="editResTitle" name="title" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editResTopic">Chủ đề *</label>
+            <select id="editResTopic" name="topic" class="js-topic-select" required></select>
+          </div>
+          <div class="form-group">
+            <label for="editResNewTopic">Hoặc chủ đề mới</label>
+            <input type="text" id="editResNewTopic" name="newTopic" placeholder="Nhập chủ đề mới...">
+          </div>
+          <div class="form-group">
+            <label for="editResVisibility">Phạm vi *</label>
+            <select id="editResVisibility" name="visibility" required>
+              <option value="public">Công khai</option>
+              <option value="friends">Bạn bè</option>
+              <option value="onlyme">Chỉ mình tôi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="editResFileLink">Đường dẫn tài liệu (URL) *</label>
+          <input type="url" id="editResFileLink" name="fileLink" required>
+        </div>
+        <div class="form-group">
+          <label for="editResDescription">Mô tả chi tiết *</label>
+          <textarea id="editResDescription" name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('editResourceModal').style.display='none'">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 EduForum — Kho tài liệu học tập cộng đồng.</p>
+    </div>
+  </footer>
+
+  <!-- THỨ TỰ NẠP SCRIPT CHUẨN -->
+  <script src="js/mockData.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/resources.js"></script>
+</body>
+</html>

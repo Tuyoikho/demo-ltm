@@ -1,0 +1,449 @@
+/* ==========================================================================
+   css/style.css
+   Biến màu học thuật (:root), Reset CSS, Bố cục Flexbox & Responsive (@media)
+   ========================================================================== */
+
+:root {
+  /* Bảng màu chủ đạo học thuật (Xanh dương & Xanh ngọc) */
+  --primary-color: #0284c7;
+  --primary-hover: #0369a1;
+  --primary-light: #e0f2fe;
+  --accent-color: #0d9488;
+  --accent-light: #ccfbf1;
+
+  /* Màu nền & Bề mặt thẻ */
+  --bg-body: #f4f6f9;
+  --bg-card: #ffffff;
+  --bg-subtle: #f8fafc;
+
+  /* Màu chữ & Viền */
+  --text-main: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+
+  /* Màu trạng thái nghiệp vụ */
+  --success-color: #16a34a;
+  --success-bg: #dcfce7;
+  --warning-color: #d97706;
+  --warning-bg: #fef3c7;
+  --danger-color: #dc2626;
+  --danger-bg: #fee2e2;
+  --info-color: #2563eb;
+  --info-bg: #dbeafe;
+
+  /* Kích thước, Bo góc & Đổ bóng */
+  --container-max: 1240px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.16);
+  --transition-fast: 0.18s ease;
+}
+
+/* ==========================================================================
+   1. RESET CSS & CẤU TRÚC CƠ BẢN
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding-top: 24px;
+  padding-bottom: 40px;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* ==========================================================================
+   2. HEADER & THANH ĐIỀU HƯỚNG (FLEXBOX)
+   ========================================================================== */
+
+.site-header {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.brand-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-logo strong {
+  font-size: 1.35rem;
+  color: var(--primary-color);
+  letter-spacing: -0.02em;
+}
+
+.brand-logo span {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.main-nav .nav-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-link:hover {
+  background-color: var(--bg-subtle);
+  color: var(--primary-color);
+}
+
+.nav-link.active {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.header-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-menu-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-menu-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.user-menu-text span {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.user-menu-text small {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   3. BỐ CỤC CHÍNH FLEXBOX (3 CỘT, 2 CỘT, TRANG XÁC THỰC & THỐNG KÊ)
+   ========================================================================== */
+
+/* Bố cục 3 cột cho index.html */
+.layout-3-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.layout-3-col .sidebar-left {
+  flex: 0 0 265px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.layout-3-col .main-feed {
+  flex: 1;
+  min-width: 0; /* Ngăn nội dung dài hoặc media đẩy tràn cột giữa */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.layout-3-col .sidebar-right {
+  flex: 0 0 285px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Bố cục 2 cột cho resources.html & profile.html */
+.layout-2-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.layout-2-col .sidebar-left {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.layout-2-col .profile-sidebar {
+  flex: 0 0 330px;
+}
+
+.layout-2-col .main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Bố cục trang Đăng nhập / Đăng ký (auth.html) */
+.auth-page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-columns {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+}
+
+.auth-columns .auth-card {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Lưới thẻ thống kê linh hoạt (admin.html & profile.html) */
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stats-grid .stat-card {
+  flex: 1 1 200px;
+}
+
+/* Hàng biểu mẫu & Thanh công cụ lọc */
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-row .form-group {
+  flex: 1 1 180px;
+}
+
+.form-row .form-group.flex-2 {
+  flex: 2 1 280px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-row input[type="search"] {
+  flex: 2 1 220px;
+}
+
+.filter-row select {
+  flex: 1 1 160px;
+}
+
+.section-header-flex {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   4. FOOTER
+   ========================================================================== */
+
+.site-footer {
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  padding: 18px 0;
+  margin-top: auto;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* ==========================================================================
+   5. RESPONSIVE DESIGN (@media)
+   ========================================================================== */
+
+@media (max-width: 992px) {
+  .layout-3-col {
+    flex-wrap: wrap;
+  }
+
+  .layout-3-col .sidebar-left {
+    flex: 1 1 100%;
+    order: 2;
+  }
+
+  .layout-3-col .main-feed {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .layout-3-col .sidebar-right {
+    flex: 1 1 100%;
+    order: 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .main-nav .nav-list {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .header-user-actions {
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+    padding-top: 8px;
+  }
+
+  /* Xếp chồng toàn bộ các cột trên màn hình nhỏ <= 768px */
+  .layout-3-col,
+  .layout-2-col,
+  .auth-columns {
+    flex-direction: column;
+  }
+
+  .layout-3-col .sidebar-left,
+  .layout-3-col .main-feed,
+  .layout-3-col .sidebar-right,
+  .layout-2-col .sidebar-left,
+  .layout-2-col .profile-sidebar,
+  .layout-2-col .main-content,
+  .auth-columns .auth-card {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .form-row,
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-row .form-group,
+  .form-row .form-group.flex-2,
+  .filter-row input[type="search"],
+  .filter-row select {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  /* Bảng dữ liệu có thanh cuộn ngang không làm vỡ khung trang */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

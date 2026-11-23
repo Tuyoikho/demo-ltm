@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduForum — Diễn đàn Thảo luận & Chia sẻ Học tập</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- HEADER & THANH ĐIỀU HƯỚNG CHÍNH -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <strong>EduForum</strong>
+        <span>Cộng đồng Học tập</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Điều hướng chính">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link active">Bảng tin thảo luận</a></li>
+          <li><a href="resources.html" class="nav-link">Kho tài liệu</a></li>
+          <li data-auth="user" style="display: none;">
+            <a href="profile.html" class="nav-link">
+              Hồ sơ cá nhân
+              <span class="badge badge-danger js-friend-request-badge" style="display: none;">0</span>
+            </a>
+          </li>
+          <li data-role="admin" style="display: none;">
+            <a href="admin.html" class="nav-link">Kiểm duyệt</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-user-actions">
+        <!-- Hiển thị khi ở chế độ Khách thăm -->
+        <div data-auth="guest">
+          <a href="auth.html" class="btn btn-primary btn-sm">Đăng nhập / Đăng ký</a>
+        </div>
+
+        <!-- Hiển thị khi đã đăng nhập (User / Admin) -->
+        <div class="user-menu-box" data-auth="user" style="display: none;">
+          <img src="assets/images/default-avatar.png" alt="Ảnh đại diện" class="avatar-sm js-current-user-avatar">
+          <div class="user-menu-text">
+            <span class="js-current-user-name">Thành viên</span>
+            <small class="js-current-user-role">Thành viên</small>
+          </div>
+          <button type="button" id="logoutBtn" class="btn btn-sm btn-outline js-logout-btn">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BỐ CỤC 3 CỘT FLEXBOX CHÍNH -->
+  <main class="container layout-3-col">
+    <!-- CỘT TRÁI: CHỦ ĐỀ HỌC TẬP & HƯỚNG DẪN -->
+    <aside class="sidebar-left">
+      <section class="card">
+        <h2 class="widget-title">Chủ đề học tập</h2>
+        <ul id="sidebarTopicsList" class="topic-sidebar-list">
+          <!-- Render động bởi PostsModule.populateTopicElements() -->
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2 class="widget-title">Quy tắc phạm vi</h2>
+        <ol class="guide-ordered-list">
+          <li><strong>Công khai:</strong> Tất cả khách thăm và thành viên đều xem được.</li>
+          <li><strong>Bạn bè:</strong> Chỉ hiển thị với tác giả và danh sách bạn bè.</li>
+          <li><strong>Chỉ mình tôi:</strong> Lưu trữ ghi chú cá nhân riêng tư.</li>
+        </ol>
+      </section>
+    </aside>
+
+    <!-- CỘT GIỮA: TẠO BÀI, BỘ LỌC & LUỒNG THẢO LUẬN -->
+    <section class="main-feed">
+      <!-- Lời nhắc đăng nhập dành cho Khách thăm -->
+      <div class="card guest-banner" data-auth="guest">
+        <p>
+          Bạn đang xem diễn đàn với tư cách <strong>Khách thăm</strong> (chỉ xem nội dung Công khai).
+          <a href="auth.html">Đăng nhập hoặc tạo tài khoản</a> để đăng bài, bình luận, đánh giá và kết bạn.
+        </p>
+      </div>
+
+      <!-- Biểu mẫu tạo bài thảo luận mới (Chỉ hiện khi đã đăng nhập) -->
+      <section class="card create-box" data-auth="user" style="display: none;">
+        <h2 class="section-title">Tạo bài thảo luận mới</h2>
+        <form id="createPostForm" class="app-form">
+          <div class="form-group">
+            <label for="postTitle">Tiêu đề thảo luận *</label>
+            <input type="text" id="postTitle" name="title" placeholder="Nhập câu hỏi hoặc chủ đề cần thảo luận..." required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postTopicSelect">Chọn chủ đề có sẵn *</label>
+              <select id="postTopicSelect" name="topic" class="js-topic-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="postNewTopic">Hoặc thêm chủ đề mới</label>
+              <input type="text" id="postNewTopic" name="newTopic" placeholder="Ví dụ: Thuật toán cơ bản">
+            </div>
+            <div class="form-group">
+              <label for="postVisibility">Phạm vi hiển thị *</label>
+              <select id="postVisibility" name="visibility" required>
+                <option value="public">Công khai (Public)</option>
+                <option value="friends">Bạn bè (Friends)</option>
+                <option value="onlyme">Chỉ mình tôi (Only Me)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="postContent">Nội dung chi tiết *</label>
+            <textarea id="postContent" name="content" rows="4" placeholder="Trình bày nội dung thảo luận, đoạn mã hoặc vấn đề bạn đang gặp..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postMediaType">Đính kèm đa phương tiện</label>
+              <select id="postMediaType" name="mediaType">
+                <option value="none">Không đính kèm</option>
+                <option value="image">Hình ảnh (URL)</option>
+                <option value="video">Video / YouTube (URL)</option>
+              </select>
+            </div>
+            <div class="form-group flex-2">
+              <label for="postMediaUrl">Đường dẫn hình ảnh hoặc video</label>
+              <input type="url" id="postMediaUrl" name="mediaUrl" placeholder="https://example.com/image.png hoặc link YouTube">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Gửi bài thảo luận</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Thanh công cụ Tìm kiếm, Lọc & Sắp xếp -->
+      <section class="card filter-toolbar" aria-label="Tìm kiếm và lọc bài thảo luận">
+        <div class="filter-row">
+          <input type="search" id="postSearchInput" placeholder="Tìm theo tiêu đề, nội dung, tác giả...">
+          <select id="postTopicFilter" class="js-topic-select" data-include-all="true" aria-label="Lọc theo chủ đề"></select>
+          <select id="postVisibilityFilter" aria-label="Lọc theo phạm vi">
+            <option value="all">Mọi phạm vi</option>
+            <option value="public">Công khai</option>
+            <option value="friends">Bạn bè</option>
+            <option value="onlyme">Chỉ mình tôi</option>
+          </select>
+          <select id="postSortSelect" aria-label="Sắp xếp bài viết">
+            <option value="newest">Mới nhất</option>
+            <option value="most_useful">Hữu ích nhất (Nhiều Like)</option>
+            <option value="most_interested">Quan tâm nhất (Nhiều tương tác)</option>
+            <option value="topic_interested">Chủ đề được quan tâm nhất</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Danh sách bài thảo luận -->
+      <section id="postsFeedContainer" class="posts-feed" aria-live="polite">
+        <!-- Render động bởi PostsModule.renderPostsFeed() -->
+      </section>
+    </section>
+
+    <!-- CỘT PHẢI: THỐNG KÊ CỘNG ĐỒNG & TÌM KIẾM BẠN BÈ -->
+    <aside class="sidebar-right">
+      <section class="card">
+        <h2 class="widget-title">Thống kê cộng đồng</h2>
+        <div id="communityQuickStats">
+          <!-- Render động bởi AdminModule.renderAdminDashboardStats() -->
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="widget-title">Kết nối bạn học</h2>
+        <div class="form-group">
+          <input type="search" id="userSearchInput" placeholder="Tìm tên hoặc @username...">
+        </div>
+        <div id="friendSuggestionsList">
+          <!-- Render động bởi FriendsModule.renderUserDiscovery() -->
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <!-- MODAL CHỈNH SỬA BÀI THẢO LUẬN -->
+  <div id="editPostModal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editPostModalTitle">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3 id="editPostModalTitle">Chỉnh sửa bài thảo luận</h3>
+        <button type="button" class="btn-close-modal" onclick="document.getElementById('editPostModal').style.display='none'">&times;</button>
+      </div>
+      <form id="editPostForm" class="app-form">
+        <div class="form-group">
+          <label for="editPostTitle">Tiêu đề *</label>
+          <input type="text" id="editPostTitle" name="title" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editPostTopic">Chủ đề *</label>
+            <select id="editPostTopic" name="topic" class="js-topic-select" required></select>
+          </div>
+          <div class="form-group">
+            <label for="editPostNewTopic">Hoặc chủ đề mới</label>
+            <input type="text" id="editPostNewTopic" name="newTopic" placeholder="Nhập chủ đề mới...">
+          </div>
+          <div class="form-group">
+            <label for="editPostVisibility">Phạm vi *</label>
+            <select id="editPostVisibility" name="visibility" required>
+              <option value="public">Công khai</option>
+              <option value="friends">Bạn bè</option>
+              <option value="onlyme">Chỉ mình tôi</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="editPostContent">Nội dung *</label>
+          <textarea id="editPostContent" name="content" rows="4" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editPostMediaType">Loại đính kèm</label>
+            <select id="editPostMediaType" name="mediaType">
+              <option value="none">Không đính kèm</option>
+              <option value="image">Hình ảnh</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="form-group flex-2">
+            <label for="editPostMediaUrl">Liên kết Media</label>
+            <input type="url" id="editPostMediaUrl" name="mediaUrl" placeholder="https://...">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('editPostModal').style.display='none'">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 EduForum — Sản phẩm cuối kỳ môn Lập trình Web cơ bản (HTML5, CSS3, JavaScript thuần &amp; localStorage).</p>
+    </div>
+  </footer>
+
+  <!-- THỨ TỰ NẠP SCRIPT CHUẨN -->
+  <script src="js/mockData.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/friends.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
